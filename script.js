@@ -5,7 +5,7 @@ const KNIGHT_MOVES = [
   [-1, -2], [-2, -1], [-2, 1], [-1, 2],
 ];
 
-const KNIGHT_IMAGE_SRC = "Scaramiong.png";
+const KNIGHT_IMAGE_SRC = "scaramiong.png";
 
 const LEADERBOARD_KEY = "knightsTourLeaderboard";
 
