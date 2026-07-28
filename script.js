@@ -1,4 +1,4 @@
-const SIZE = 5;
+const SIZE = 7;
 const TOTAL_CELLS = SIZE * SIZE;
 const KNIGHT_MOVES = [
   [1, 2], [2, 1], [2, -1], [1, -2],
@@ -73,7 +73,7 @@ function cellEl(r, c) {
 }
 
 function notation(r, c) {
-  const cols = "ABCDE";
+  const cols = "ABCDEFG";
   return `${cols[c]}${SIZE - r}`;
 }
 
@@ -244,7 +244,7 @@ function renderLeaderboard() {
       <tr>
         <td>${i + 1}</td>
         <td>${e.name}</td>
-        <td>${e.squares}/25 ${e.completed ? "✓" : ""}</td>
+        <td>${e.squares}/${TOTAL_CELLS} ${e.completed ? "✓" : ""}</td>
         <td>${String(Math.floor(e.time / 60)).padStart(2, "0")}:${String(e.time % 60).padStart(2, "0")}</td>
       </tr>`
     )
