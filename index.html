@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scaramiong's Tour</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <span class="maple maple-1">🍁</span>
+  <span class="maple maple-2">🍁</span>
+  <span class="maple maple-3">🍁</span>
+  <span class="maple maple-4">🍁</span>
+  <span class="maple maple-5">🍁</span>
+  <span class="maple maple-6">🍁</span>
+
+  <div id="landing" class="screen">
+    <h1>Would you mind to help this little kitten?</h1>
+    <input type="text" id="nameInput" placeholder="Your name..." maxlength="20">
+    <button id="startBtn">Start</button>
+    <button id="showBoardBtn" class="secondary">Rank</button>
+  </div>
+
+  <div id="game" class="screen hidden">
+    <div class="topbar">
+      <span id="playerLabel"></span>
+      <span id="timer">00:00</span>
+      <span id="counter">0/25</span>
+    </div>
+
+    <div id="board"></div>
+
+    <p id="statusText">Click the box to place the Scaramiong</p>
+
+    <div class="controls">
+      <button id="undoBtn">Undo</button>
+      <button id="restartBtn">Play Again</button>
+    </div>
+
+    <h3>Movement History</h3>
+    <div id="history"></div>
+  </div>
+
+  <div id="leaderboardModal" class="modal hidden">
+    <div class="modal-content">
+      <button id="closeModal" class="close">&times;</button>
+      <h2>🏆 Leaderboard</h2>
+      <table id="leaderboardTable">
+        <thead>
+          <tr><th>#</th><th>Name</th><th>Square</th><th>Time</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
