@@ -1,13 +1,32 @@
-const SIZE = 7;
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCgdXXwpJW_3kruVl0RP1oKo0nK1XWUX9c",
+  authDomain: "scaramiong-tour.firebaseapp.com",
+  projectId: "scaramiong-tour",
+  storageBucket: "scaramiong-tour.firebasestorage.app",
+  messagingSenderId: "37914315113",
+  appId: "1:37914315113:web:c01596900b3beac6fb55f8",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const scoresCollection = collection(db, "scores");
+
+const SIZE = 5;
 const TOTAL_CELLS = SIZE * SIZE;
 const KNIGHT_MOVES = [
   [1, 2], [2, 1], [2, -1], [1, -2],
   [-1, -2], [-2, -1], [-2, 1], [-1, 2],
 ];
 
-const KNIGHT_IMAGE_SRC = "scaramiong.png";
-
-const LEADERBOARD_KEY = "knightsTourLeaderboard";
+const KNIGHT_IMAGE_SRC = "kuda.png";
 
 let playerName = "";
 let visited = [];
@@ -73,7 +92,7 @@ function cellEl(r, c) {
 }
 
 function notation(r, c) {
-  const cols = "ABCDEFG";
+  const cols = "ABCDE";
   return `${cols[c]}${SIZE - r}`;
 }
 
@@ -213,30 +232,43 @@ function render() {
     .join(" &rarr; ");
 }
 
-function loadLeaderboard() {
-  const raw = localStorage.getItem(LEADERBOARD_KEY);
-  return raw ? JSON.parse(raw) : [];
+async function saveScore() {
+  try {
+    await addDoc(scoresCollection, {
+      name: playerName,
+      squares: visited.length,
+      completed: status === "won",
+      time: currentElapsedSeconds(),
+      date: new Date().toISOString(),
+    });
+  } catch (err) {
+    console.error("Failed to save score:", err);
+  }
 }
 
-function saveScore() {
-  const data = loadLeaderboard();
-  data.push({
-    name: playerName,
-    squares: visited.length,
-    completed: status === "won",
-    time: currentElapsedSeconds(),
-    date: new Date().toISOString(),
-  });
-  data.sort((a, b) => {
-    if (a.completed !== b.completed) return b.completed - a.completed;
-    if (a.completed) return a.time - b.time;
-    return b.squares - a.squares || a.time - b.time;
-  });
-  localStorage.setItem(LEADERBOARD_KEY, JSON.stringify(data.slice(0, 50)));
+async function loadLeaderboard() {
+  try {
+    const snap = await getDocs(scoresCollection);
+    const data = snap.docs.map((d) => d.data());
+    data.sort((a, b) => {
+      if (a.completed !== b.completed) return b.completed - a.completed;
+      if (a.completed) return a.time - b.time;
+      return b.squares - a.squares || a.time - b.time;
+    });
+    return data;
+  } catch (err) {
+    console.error("Failed to load leaderboard:", err);
+    return [];
+  }
 }
 
-function renderLeaderboard() {
-  const data = loadLeaderboard();
+async function renderLeaderboard() {
+  leaderboardBody.innerHTML = `<tr><td colspan="4">Loading...</td></tr>`;
+  const data = await loadLeaderboard();
+  if (data.length === 0) {
+    leaderboardBody.innerHTML = `<tr><td colspan="4">No scores yet.</td></tr>`;
+    return;
+  }
   leaderboardBody.innerHTML = data
     .slice(0, 20)
     .map(
@@ -265,8 +297,7 @@ undoBtn.addEventListener("click", undo);
 restartBtn.addEventListener("click", restart);
 
 showBoardBtn.addEventListener("click", () => {
-  renderLeaderboard();
   modal.classList.remove("hidden");
+  renderLeaderboard();
 });
 closeModal.addEventListener("click", () => modal.classList.add("hidden"));
-
