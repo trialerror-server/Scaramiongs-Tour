@@ -19,7 +19,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const scoresCollection = collection(db, "scores");
 
-const SIZE = 5;
+const SIZE = 7;
 const TOTAL_CELLS = SIZE * SIZE;
 const KNIGHT_MOVES = [
   [1, 2], [2, 1], [2, -1], [1, -2],
@@ -92,7 +92,7 @@ function cellEl(r, c) {
 }
 
 function notation(r, c) {
-  const cols = "ABCDE";
+  const cols = "ABCDEFG";
   return `${cols[c]}${SIZE - r}`;
 }
 
