@@ -26,7 +26,7 @@ const KNIGHT_MOVES = [
   [-1, -2], [-2, -1], [-2, 1], [-1, 2],
 ];
 
-const KNIGHT_IMAGE_SRC = "kuda.png";
+const KNIGHT_IMAGE_SRC = "scaramiong.png";
 
 let playerName = "";
 let visited = [];
